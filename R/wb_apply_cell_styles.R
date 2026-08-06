@@ -23,7 +23,7 @@ wb_apply_cell_styles <- function(wb, sheet, df_style) {
       ),
       text.direction = dplyr::case_when(
         .data$text.direction == "tbrl" ~ "180",
-        .data$text.direction == "btrl" ~ "90",
+        .data$text.direction == "btlr" ~ "90",
         TRUE ~ ""
       )
     ) |>

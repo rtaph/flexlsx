@@ -54,3 +54,29 @@ test_that("add fill", {
   expect_true(wb$get_cell_style("fill", dims = "L6") !=
     wb$get_cell_style("fill", dims = "G6"))
 })
+
+test_that("rotated text keeps its rotation", {
+  skip_if_not_installed("flextable")
+  data("mtcars")
+
+  ft <- flextable::flextable(head(mtcars)[, c("mpg", "cyl", "disp")]) |>
+    flextable::rotate(j = "mpg", rotation = "btlr", part = "header") |>
+    flextable::rotate(j = "cyl", rotation = "tbrl", part = "header")
+
+  wb <- openxlsx2::wb_workbook()$add_worksheet("rotate")
+  wb <- wb_add_flextable(
+    wb = wb,
+    ft = ft,
+    sheet = "rotate",
+    dims = "A1"
+  )
+
+  cell_xf <- function(dims) {
+    style_id <- as.integer(wb$get_cell_style("rotate", dims = dims))
+    wb$styles_mgr$styles$cellXfs[[style_id + 1L]]
+  }
+
+  expect_match(cell_xf("A1"), 'textRotation="90"', fixed = TRUE)
+  expect_match(cell_xf("B1"), 'textRotation="180"', fixed = TRUE)
+  expect_false(grepl("textRotation", cell_xf("C1"), fixed = TRUE))
+})
