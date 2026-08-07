@@ -1,3 +1,9 @@
+# flexlsx (development version)
+
+* Bugfix: text rotated bottom-to-top kept no rotation in the exported xlsx. The
+mapping to Excel's `textRotation` tested for `"btrl"`, which `flextable::rotate()`
+never emits; the bottom-to-top direction is `"btlr"`.
+
 # flexlsx 1.0.0
 
 * Implemented changes for new releases of openxlsx2 and flextable (#44, thanks to @JanMarvin)
